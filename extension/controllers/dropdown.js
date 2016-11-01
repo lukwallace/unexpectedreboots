@@ -1,16 +1,19 @@
 angular.module('dropdownController', [])
 
-.controller('dropdown', function($scope, $http, $location, $state) {
+.controller('dropdown', function($scope, $http, $location, $state, __env) {
   $scope.signinMode = true;
   $scope.signupMode = false;
   $scope.usernamePattern = '^$|^[a-z]+[A-Za-z0-9_-.]+';
   $scope.showError = false;
 
+  const destUrl = __env.destUrl;
+  localStorage.setItem('destUrl', destUrl);
+
   $scope.signUp = function() {
 
     $http({ 
       method: 'POST',
-      url: 'http://162.243.154.104:3000/api/users/register',
+      url: destUrl + '/api/users/register',
       params: {
         email: $scope.email, 
         username: $scope.username, 
@@ -21,7 +24,7 @@ angular.module('dropdownController', [])
       console.log('then statement sign up', response);
       if (response.data) {
         chrome.cookies.set({
-          url: 'http://162.243.154.104:3000/dashboard.html',
+          url: destUrl + '/dashboard.html',
           name: 'username',
           value: $scope.username
         }, function(cookies) {
@@ -47,7 +50,7 @@ angular.module('dropdownController', [])
 
     $http({ 
       method: 'POST',
-      url: 'http://162.243.154.104:3000/api/users/login',
+      url: destUrl + '/api/users/login',
       params: {
         username: $scope.username, 
         password: $scope.password
@@ -59,7 +62,7 @@ angular.module('dropdownController', [])
         $scope.showError = false;
         localStorage.setItem('username', $scope.username);
         chrome.cookies.set({
-          url: 'http://162.243.154.104:3000/dashboard.html',
+          url: destUrl + '/dashboard.html',
           name: 'username',
           value: $scope.username
         }, function(cookies) {

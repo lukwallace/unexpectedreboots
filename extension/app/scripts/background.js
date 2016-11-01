@@ -1,13 +1,14 @@
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
   if ( changeInfo.status === 'complete' ) {
     var username = localStorage.getItem('username');
+    var destUrl = localStorage.getItem('destUrl');
     var tabUrl = tab.url;
     var userMarkups = [];
     if (username) {
       var tab = tabId;
       $.ajax({
         type: 'GET',
-        url: 'http://162.243.154.104:3000/test/users/markups',
+        url: destUrl + '/test/users/markups',
         data: {username: username},
         success: function(response) {
           for (var i = 0; i < response.length; i++) {
@@ -21,7 +22,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
           //get all groups for a user
           $.ajax({
             type: 'GET',
-            url: 'http://162.243.154.104:3000/api/users/groups',
+            url: destUrl + '/api/users/groups',
             data: {username: username},
             success: function(response) {
               // alert('called api/users/groups');
@@ -33,7 +34,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
               for(var j = 0; j < groups.length; j++) {
                 $.ajax({
                   type: 'GET',
-                  url: 'http://162.243.154.104:3000/api/groups/markups',
+                  url: destUrl + '/api/groups/markups',
                   data: {groupID: groups[j]},
                   success: function(response) {
                     var groupMarkups = [];
@@ -57,9 +58,9 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
 });
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) { 
   console.log('background script triggered');    
-  var username = localStorage.getItem('username');
   if (username) {
     var selection = request.selection;
+    var destUrl = localStorage.getItem('destUrl');
     var url = '';
     var title = '';
     var text = request.text;
@@ -69,7 +70,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     //need url, title, and text
       $.ajax({
         type: "POST",
-        url: 'http://162.243.154.104:3000/api/markups/create',
+        url: destUrl + '/api/markups/create',
         data: {
           username: username,
           anchor: selection,
@@ -84,7 +85,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       });
       $.ajax({
         type: 'GET',
-        url: 'http://162.243.154.104:3000/test/users/groups',
+        url: destUrl + '/test/users/groups',
         data: {username: username},
         success: function(response) {
           var postGroups = [];
@@ -96,7 +97,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             for (var j = 0; j <postGroups.length; j++) {
               $.ajax({
                 type: 'POST',
-                url: 'http://162.243.154.104:3000/test/markups/share',
+                url: destUrl + '/test/markups/share',
                 data: {
                   username: username,
                   anchor: selection,

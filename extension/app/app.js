@@ -1,11 +1,22 @@
+
+var env = {};
+
+// Import variables if present (from env.js)
+if(window){  
+  Object.assign(env, window.__env);
+}
+
 var myApp = angular.module('Markable', [
   'ui.router',
   'dropdownController',
   'mainController',
   'Markable.directives'
-])
+]);
 
-.config(function($stateProvider, $urlRouterProvider) {
+
+myApp.constant('__env', env);
+
+myApp.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
   $stateProvider
   .state('home', {
@@ -24,10 +35,11 @@ var myApp = angular.module('Markable', [
 .run(['$state', function ($state) {
   console.log($state);
 }])
-.run(function ($rootScope, $state) {
+.run(function ($rootScope, $state, __env) {
+  const destUrl = __env.destUrl;
   $rootScope.$on('$stateChangeStart', function (evt, toState) {
 
-    chrome.cookies.getAll({url: 'http://162.243.154.104:3000/dashboard.html'}, function(cookie) {
+    chrome.cookies.getAll({url: destUrl + '/dashboard.html'}, function(cookie) {
       console.log('cookie:', cookie);
       if (cookie) {
         if (!cookie.length > 0) {
@@ -40,4 +52,3 @@ var myApp = angular.module('Markable', [
     });
   });
 });
-
