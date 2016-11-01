@@ -84,12 +84,12 @@ exports.getGroups = function(username, callback) {
 };
 
 exports.getMarkups = function(username, callback) {
-
+  console.log('GETTING MARKUPS for ' + username);
   pool.query({
     text:
       'SELECT u2.username AS author, \
         s2.title AS title, \
-        s2.url AS url \
+        s2.url AS url, \
         anchor, text, comment, temp.createdat \
       FROM ( \
         SELECT m.authorid AS authorid, \
@@ -111,11 +111,14 @@ exports.getMarkups = function(username, callback) {
 
   function(err, rows) {
     if (err) {
+      console.log('ERROR', err);
       callback(err, null);
     } else {
       if (rows.rowCount === 0) {
+        console.log('NO MARKUPS FOUND');
         callback('no markups found for this user', null);
       } else {
+        console.log('FOUND MARKUPS');
         callback(null, rows.rows);
       }
     }
