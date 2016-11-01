@@ -1,11 +1,22 @@
+
+var env = {};
+
+// Import variables if present (from env.js)
+if(window){  
+  Object.assign(env, window.__env);
+}
+
 var myApp = angular.module('Markable', [
   'ui.router',
   'dropdownController',
   'mainController',
   'Markable.directives'
-])
+]);
 
-.config(function($stateProvider, $urlRouterProvider) {
+
+myApp.constant('__env', env);
+
+myApp.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/');
   $stateProvider
   .state('home', {
@@ -40,4 +51,3 @@ var myApp = angular.module('Markable', [
     });
   });
 });
-
