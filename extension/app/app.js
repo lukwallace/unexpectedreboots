@@ -35,10 +35,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 .run(['$state', function ($state) {
   console.log($state);
 }])
-.run(function ($rootScope, $state) {
+.run(function ($rootScope, $state, __env) {
+  const destUrl = __env.destUrl;
   $rootScope.$on('$stateChangeStart', function (evt, toState) {
 
-    chrome.cookies.getAll({url: 'http://162.243.154.104:3000/dashboard.html'}, function(cookie) {
+    chrome.cookies.getAll({url: destUrl + '/dashboard.html'}, function(cookie) {
       console.log('cookie:', cookie);
       if (cookie) {
         if (!cookie.length > 0) {
