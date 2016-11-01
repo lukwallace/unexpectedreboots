@@ -1,6 +1,6 @@
 angular.module('mainController', ['ui.router'])
 
-.controller('main', function($scope, $http, $location, $state, __url) {
+.controller('main', function($scope, $http, $location, $state, __env) {
   const destUrl = __env.destUrl;
   $scope.testSession = function() {
     chrome.tabs.create({url: destUrl + '/dashboard.html'})
