@@ -10,7 +10,7 @@ angular.module('dropdownController', [])
 
     $http({ 
       method: 'POST',
-      url: 'http://104.237.1.118:3000/api/users/register',
+      url: 'http://162.243.154.104:3000/api/users/register',
       params: {
         email: $scope.email, 
         username: $scope.username, 
@@ -21,7 +21,7 @@ angular.module('dropdownController', [])
       console.log('then statement sign up', response);
       if (response.data) {
         chrome.cookies.set({
-          url: 'http://104.237.1.118:3000/dashboard.html',
+          url: 'http://162.243.154.104:3000/dashboard.html',
           name: 'username',
           value: $scope.username
         }, function(cookies) {
@@ -47,7 +47,7 @@ angular.module('dropdownController', [])
 
     $http({ 
       method: 'POST',
-      url: 'http://104.237.1.118:3000/api/users/login',
+      url: 'http://162.243.154.104:3000/api/users/login',
       params: {
         username: $scope.username, 
         password: $scope.password
@@ -59,7 +59,7 @@ angular.module('dropdownController', [])
         $scope.showError = false;
         localStorage.setItem('username', $scope.username);
         chrome.cookies.set({
-          url: 'http://104.237.1.118:3000/dashboard.html',
+          url: 'http://162.243.154.104:3000/dashboard.html',
           name: 'username',
           value: $scope.username
         }, function(cookies) {

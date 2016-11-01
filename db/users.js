@@ -19,6 +19,7 @@ exports.insert = function(username, email, password, callback) {
   }, 
 
   function(err, rows) {
+    console.log('ROWS ', rows);
     if (rows.rowCount > 0) {
       callback('user already exists', null);
     } else {

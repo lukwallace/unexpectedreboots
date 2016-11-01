@@ -7,7 +7,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
       var tab = tabId;
       $.ajax({
         type: 'GET',
-        url: 'http://104.237.1.118:3000/test/users/markups',
+        url: 'http://162.243.154.104:3000/test/users/markups',
         data: {username: username},
         success: function(response) {
           for (var i = 0; i < response.length; i++) {
@@ -21,7 +21,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
           //get all groups for a user
           $.ajax({
             type: 'GET',
-            url: 'http://104.237.1.118:3000/api/users/groups',
+            url: 'http://162.243.154.104:3000/api/users/groups',
             data: {username: username},
             success: function(response) {
               // alert('called api/users/groups');
@@ -33,7 +33,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
               for(var j = 0; j < groups.length; j++) {
                 $.ajax({
                   type: 'GET',
-                  url: 'http://104.237.1.118:3000/api/groups/markups',
+                  url: 'http://162.243.154.104:3000/api/groups/markups',
                   data: {groupID: groups[j]},
                   success: function(response) {
                     var groupMarkups = [];
