@@ -250,7 +250,7 @@ exports.shareMarkup = function(req, res) {
     markupID, groupID
   **/
 
-  markups.share(url, title, username, anchor, text, comment, function(err, success) {
+  markups.share(url, title, username, anchor, text, comment, groupID, function(err, success) {
     err ? res.send(err) : res.send(success);
   });
 };
