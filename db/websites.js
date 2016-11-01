@@ -4,8 +4,8 @@ var Promise = require('es6-promise').Promise;
 
 var CONFIG = {
   host: 'localhost',
-  user: 'admin',
-  password: 'rQUNyC8W9YT7ZZBW',
+  user: 'markable',
+  password: 'markable123',
   database: 'markable'
 };
 
