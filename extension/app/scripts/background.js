@@ -69,7 +69,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     //need url, title, and text
       $.ajax({
         type: "POST",
-        url: 'http://162.243.154.104:3000/api/markups/create',
+        url: 'http://104.237.1.118:3000/api/markups/create',
         data: {
           username: username,
           anchor: selection,
@@ -84,7 +84,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       });
       $.ajax({
         type: 'GET',
-        url: 'http://162.243.154.104:3000/test/users/groups',
+        url: 'http://104.237.1.118:3000/test/users/groups',
         data: {username: username},
         success: function(response) {
           var postGroups = [];
@@ -96,7 +96,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             for (var j = 0; j <postGroups.length; j++) {
               $.ajax({
                 type: 'POST',
-                url: 'http://162.243.154.104:3000/test/markups/share',
+                url: 'http://104.237.1.118:3000/test/markups/share',
                 data: {
                   username: username,
                   anchor: selection,
