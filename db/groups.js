@@ -45,6 +45,7 @@ exports.create = function(groupName, owner, callback) {
           if (err2) {
             callback(err2, null);
           } else {
+            console.log('GROUP ROWS', rows2);
             var ownerID = rows2.rows[0].id;
 
             pool.query({
