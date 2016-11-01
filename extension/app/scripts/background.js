@@ -83,6 +83,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           // alert('success');
         }
       });
+
       $.ajax({
         type: 'GET',
         url: destUrl + '/test/users/groups',
@@ -117,7 +118,15 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           }
         }
       });
+
+
     });
   } 
 })
+
+
+
+
+
+
 
