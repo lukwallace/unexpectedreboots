@@ -1,6 +1,7 @@
 angular.module('mainController', ['ui.router'])
 
 .controller('main', function($scope, $http, $location, $state, __env) {
+
   const liveUrl = __env.liveUrl;
   $scope.testSession = function() {
     chrome.tabs.create({url: liveUrl + '/client/dashboard.html'})
@@ -17,3 +18,21 @@ angular.module('mainController', ['ui.router'])
 
   };
 });
+
+
+
+var getUserGroups = (callback) => {
+
+  const username = localStorage.getItem('username');
+  const destUrl = localStorage.getItem('destUrl');
+
+  $.get({
+    url: destUrl + '/test/users/groups',
+    data : {username: username},
+    success: (data) => {
+      callback(null, data)
+    }
+  }).fail( () => {
+    callback('getUserGroups error', []);
+  });
+};
