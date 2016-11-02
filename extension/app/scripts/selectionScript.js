@@ -1,4 +1,7 @@
 // $(document).ready(function() {
+
+vex.defaultOptions.className = 'vex-theme-os';
+
 var elements = document.querySelectorAll("p, li, em, span, h1, h2, h3, h4, h5, td, tr, th, tbody");
 
 // var elements = document.getElementsByTagName("*");
@@ -11,12 +14,33 @@ var postSelection = function(targetText) {
   }, function(response) {
   });
 }
+
+$('body').delegate('button.medium-editor-action.medium-editor-button-last', 'click', function() {
+  vex.dialog.open({
+      message: 'Enter your comment',
+      input: [
+          '<input name="comment" type="text" autocomplete="off" required />'
+      ].join(''),
+      buttons: [
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Enter' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+      ],
+      callback: function (data) {
+          if (!data) {
+              console.log('Cancelled')
+          } else {
+              console.log('Comment', data.comment)
+          }
+      }
+  })
+});
+
 editor = new MediumEditor(elements, {
   anchorPreview: false,
   placeholder: false,
   disableEditing: true,
   toolbar: {
-    buttons: ['sendToSelect', 'sendSelection']
+    buttons: ['sendToSelect', 'sendSelection', 'sendWithComments']
   },
   extensions: {
       'sendToSelect': new MediumButton({
@@ -29,7 +53,16 @@ editor = new MediumEditor(elements, {
         }
       }),
       'sendSelection': new MediumButton({
-        label: 'Share',
+        label: 'Share with All',
+        start: '<span style="background-color: powderblue;">',
+        end: '</span>',
+        action: function(html, mark) {
+          postSelection(html);
+          return html;
+        }
+      }),
+      'sendWithComments': new MediumButton({
+        label: 'Share and Add Comment',
         start: '<span style="background-color: powderblue;">',
         end: '</span>',
         action: function(html, mark) {
