@@ -36,7 +36,7 @@ app.use('/api/users/update', sessionChecker, routes.updateUser);
 // `/api/groups/*` endpoints
 app.use('/api/groups/create', sessionChecker, routes.createGroup);
 app.use('/api/groups/add', sessionChecker, routes.addMember);
-app.use('/api/groups/join', sessionChecker, routes.joinGroup);
+app.use('/api/groups/join', routes.joinGroup);
 app.use('/api/groups/users', sessionChecker, routes.getGroupMembers);
 app.use('/api/groups/markups', sessionChecker, routes.getGroupMarkups);
 app.use('/api/groups/sites', sessionChecker, routes.getGroupSites);
