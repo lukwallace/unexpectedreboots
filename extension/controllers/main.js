@@ -35,7 +35,6 @@ angular.module('mainController', ['ui.router'])
         console.log('$scope.groups', $scope.groups);
       },
     }).fail( (data) => {
-      alert(JSON.stringify(data));
       console.log('FAIL', data);
     });
   };
