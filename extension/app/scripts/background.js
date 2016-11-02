@@ -49,13 +49,14 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
                   }
                 })
               };
-            } 
+            }
           })
         }
       });
     }
   }
 });
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {  
   var username = localStorage.getItem('username');
   if (username) {
@@ -79,8 +80,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           text: request.text,
           comment: null
         },
-        success: function() {
+        success: function(data) {
           // alert('success');
+          var obj = {'hello': 'world'};
+          alert('hello');
+          sender(obj);
+          sendResponse(obj);
         }
       });
       $.ajax({
@@ -124,10 +129,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           }
         }
       });
-
-
     });
-  } 
+  }
 })
 
 
