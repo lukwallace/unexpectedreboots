@@ -36,6 +36,8 @@ exports.create = function(groupName, owner, callback) {
         callback('duplicate group name for specified user', null);
       } else {
 
+        console.log('lookup', owner)
+
         pool.query({
           text: 'SELECT u.id FROM users u \
           WHERE u.username = \'' + owner + '\''
@@ -45,8 +47,8 @@ exports.create = function(groupName, owner, callback) {
           if (err2) {
             callback(err2, null);
           } else {
-            if(!row2.rows[0]) {
-              console.log('ERROR: row2', row2);
+            if(!rows2.rows[0]) {
+              console.log('ERROR: row2', rows2);
               return;
             }
             var ownerID = rows2.rows[0].id;
