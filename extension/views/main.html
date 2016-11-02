@@ -1,5 +1,9 @@
 <div>
-  <h1>Welcome to our app!</h1>
+  <h1>Welcome to our app! :-)</h1>
   <button ng-click="testSession()">click to go to dashboard</button>
   <button ng-click="signOut()">Sign out here</button>
+  <div>Share Markups With:</div>
+  <div ng-repeat="group in groups track by $index">
+  	{{group['groupname']}}
+  </div>
 </div>
