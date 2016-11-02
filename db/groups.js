@@ -84,6 +84,50 @@ exports.create = function(groupName, owner, callback) {
   });
 };
 
+exports.join = function(groupID, newMember, callback) {
+  console.log('/**', newMember, ' is joining ', groupID, ' **/');
+
+  pool.query({
+    text: 'SELECT u.id AS userid FROM users u \
+      WHERE u.username = \'' + newMember + '\';'
+  }, 
+  function(err, rows) {
+    if(rows.count === 0) {
+      callback('new user ' + newMember + ' does not exist', null);
+    } else {
+      pool.query({
+        text: 'SELECT u.id AS userid FROM users u \
+                WHERE u.username = \'' + newMember + '\' \
+                AND u.id IN ( \
+                  SELECT ug.userid FROM usersgroups ug \
+                  WHERE ug.groupid = \'' + groupID + '\' \
+                )'
+      }, 
+      function(err2, rows2) {
+        if(rows2.length > 0) {
+          callback('cannot add a user that is already a member of the group', null);
+        } else {
+          pool.query({
+            // select newmemberID and insert it into the relevant group
+            text: 'INSERT INTO usersgroups \
+              VALUES ( \
+                ( \
+                SELECT u.id FROM users u \
+                WHERE u.username = \'' + newMember + '\' \
+                ),' +
+                groupID +
+              ');'
+          }, 
+
+          function(err3, rows3) {
+            err3 ? callback(err3, null) : callback(null, true);
+          });
+        }
+      });
+    }
+  });
+};
+
 exports.add = function(groupID, username, newMember, callback) {
 
   console.log('/**', username, 'is adding:', newMember, 'to group:', groupID, '**/');

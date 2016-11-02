@@ -119,6 +119,15 @@ exports.createGroup = function(req, res) {
   });
 };
 
+exports.joinGroup = function(req, res) {
+  var username = req.body.username;
+  var groupID = req.body.groupID;
+
+  groups.join(groupID, username, function(err, success) {
+    err ? res.send(err) : res.send(success);
+  });
+};
+
 exports.addMember = function(req, res) {
   var groupID = req.query.groupID || req.body.groupID;
   var username = req.query.username || req.body.username;
