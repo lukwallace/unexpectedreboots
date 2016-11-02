@@ -3,12 +3,14 @@
   <button ng-click="testSession()">click to go to dashboard</button>
   <button ng-click="signOut()">Sign out here</button>
   <div>Share Markups With:</div>
-  <br>
-   <label ng-repeat="group in groups">
+   <div ng-repeat="group in groups track by $index">
      <input
+       ng-model="checked"
+       ng-checked="{{group[2]}}"
+       ng-change="{{checked !== undefined ? checkboxChanged(group, !group[2]) : null}}"
        type="checkbox"
        name="selectedGroups[]"
-       value="{{group}}"
-     > {{group}}
-   </label>
+       value="{{group[0]}}" 
+     > {{group[0]}} </br>
+   </div>
 </div>
