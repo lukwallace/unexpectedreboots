@@ -35,7 +35,7 @@ class SharedPanel extends React.Component {
     return (
       <div className='container col-sm-5 shared-panel'>
         <div className='panel-title'>Shared Sites</div>
-          { this.state.sites.map(function(site) {  //change props to state on refactor
+          { this.state.sites.map(function(site) {
             return (
              <div className='entry'>
                 <SiteEntry title={site.title} url={site.url} />
