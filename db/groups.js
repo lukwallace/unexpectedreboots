@@ -270,3 +270,13 @@ exports.getSites = function(groupID, callback) {
     err ? callback(err, null) : callback(null, rows.rows);
   });
 };
+
+exports.getAllGroups = function(callback) {
+pool.query({text:
+  'SELECT * from groups;'
+  },
+  function(err, rows) {
+    err ? callback(err, null) : callback(null, rows.rows);
+  }
+  );
+};
