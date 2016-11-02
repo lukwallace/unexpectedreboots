@@ -1,5 +1,14 @@
 <div>
-  <h1>Welcome to our app!</h1>
+  <h1>Welcome to our app! :-)</h1>
   <button ng-click="testSession()">click to go to dashboard</button>
   <button ng-click="signOut()">Sign out here</button>
+  <div>Share Markups With:</div>
+  <br>
+   <label ng-repeat="group in groups">
+     <input
+       type="checkbox"
+       name="selectedGroups[]"
+       value="{{group}}"
+     > {{group}}
+   </label>
 </div>

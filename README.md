@@ -45,20 +45,20 @@ psql markable
 >Inside psql shell; load sql file; make user
 ```sh
 \i db/schema.sql
-CREATE USER postgres WITH PASSWORD 'markable123'
+CREATE USER postgres WITH PASSWORD 'markable123';
 ```
 >Display all tables and grant permissions to user
 ```sh
 \dt
-GRANT ALL ON groups TO postgres
-GRANT ALL ON markups TO postgres
-GRANT ALL ON markupsgroups TO postgres
-GRANT ALL ON sites TO postgres
-GRANT ALL ON sitesgroups TO postgres
-GRANT ALL ON users TO postgres
-GRANT ALL ON usersgroups TO postgres
+GRANT ALL ON groups TO postgres;
+GRANT ALL ON markups TO postgres;
+GRANT ALL ON markupsgroups TO postgres;
+GRANT ALL ON sites TO postgres;
+GRANT ALL ON sitesgroups TO postgres;
+GRANT ALL ON users TO postgres;
+GRANT ALL ON usersgroups TO postgres;
 ```
 >Superuser incase of stuff
 ```sh
-ALTER USER postgres WITH SUPERUSER
+ALTER USER postgres WITH SUPERUSER;
 ```
