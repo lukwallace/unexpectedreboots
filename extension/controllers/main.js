@@ -28,9 +28,11 @@ angular.module('mainController', ['ui.router'])
       success: (data) => {
         console.log('GROUPS DATA', data);
         // alert(JSON.stringify(data));
-        for(var i = 0; i < response.length; i++) {
-          $scope.groups.push(response[i].groupname);
+        $scope.groups = [];
+        for(var i = 0; i < data.length; i++) {
+          $scope.groups.push(data[i].groupname);
         }
+        console.log('$scope.groups', $scope.groups);
       },
     }).fail( (data) => {
       alert(JSON.stringify(data));
