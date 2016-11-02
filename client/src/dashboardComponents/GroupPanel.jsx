@@ -4,14 +4,15 @@ class GroupPanel extends React.Component {
     super(props);
 
     this.state = {
-      groups: []
+      groups: [],
+      allGroups: [],
     };
   }
 
   
   fetchGroups() {
     var context = this;
-
+    //first fetch user groups
     fetch(SERVER_IP + ':3000/test/users/groups', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -26,6 +27,44 @@ class GroupPanel extends React.Component {
       });
     });
 
+    //then get all groups
+    fetch(SERVER_IP + ':3000/test/groups/all', {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'}
+    })
+    .then(function(res) {
+      return res.json();
+    })
+    .then(function(value) {
+      context.setState({
+        allGroups: value
+      });
+    });
+
+  }
+
+  toggleDropdownCb(event) {
+    $(event.target).closest('.dropdown').toggleClass('open');
+  }
+
+  joinGroupCb(event) {
+    const groupIndex = $(event.target).closest('li').index();
+    this.joinGroupAjax(this.state.allGroups[groupIndex].id);
+  }
+
+  joinGroupAjax(groupID) {
+    $.ajax({
+      url: SERVER_IP + ':3000/api/groups/join',
+      method: 'POST',
+      data: {
+        groupID: groupID,
+        username: getUsername() 
+      }
+    }).done( (data) => {
+      console.log('join group data', data);
+    }).fail( (err) => {
+      console.log('join group err', err);
+    });
   }
 
 
@@ -67,21 +106,18 @@ class GroupPanel extends React.Component {
     this.handleGroupCreation();
   }
 
-  
-
-
-
   render() {
   
 
     return (
       <div>
-        <AddGroup />
+        <AddGroup/>
+        <JoinGroup allGroups={this.state.allGroups} toggleDropdownCb={this.toggleDropdownCb} joinGroupCb={this.joinGroupCb.bind(this)}/>
         { this.state.groups.filter((group) => {
           return (group.userid === group.groupowner);
         }).map((group) => {
           return (
-            <div>
+            <div key={group.groupID}>
               <Group group={group} changeViewCb={this.props.changeViewCb} />
             </div>
         ); }) }
@@ -90,7 +126,7 @@ class GroupPanel extends React.Component {
           return (group.userid !== group.groupowner);
         }).map((group) => {
           return (
-            <div>
+            <div key={group.groupID}>
               <Group group={group} changeViewCb={this.props.changeViewCb} />
             </div>
         ); }) }
