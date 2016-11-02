@@ -56,8 +56,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
     }
   }
 });
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) { 
-  console.log('background script triggered');    
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {  
+  var username = localStorage.getItem('username');
   if (username) {
     var selection = request.selection;
     var destUrl = localStorage.getItem('destUrl');
@@ -83,7 +83,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           // alert('success');
         }
       });
-
       $.ajax({
         type: 'GET',
         url: destUrl + '/test/users/groups',
@@ -102,7 +101,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 postGroups.push(response[i].groupid);
               }
             }
-            // alert(postGroups);
             for (var j = 0; j < postGroups.length; j++) {
               $.ajax({
                 type: 'POST',
