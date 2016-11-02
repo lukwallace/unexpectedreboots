@@ -74,11 +74,7 @@ exports.getGroups = function(username, callback) {
     if (err) {
       callback(err, null);
     } else {
-      if (rows.rowCount === 0) {
-        callback('user is not part of any groups', null);
-      } else {
-        callback(null, rows.rows);
-      }
+      callback(null, rows.rows);
     }
   });
 };
@@ -114,13 +110,7 @@ exports.getMarkups = function(username, callback) {
       console.log('ERROR', err);
       callback(err, null);
     } else {
-      if (rows.rowCount === 0) {
-        console.log('NO MARKUPS FOUND');
-        callback('no markups found for this user', null);
-      } else {
-        console.log('FOUND MARKUPS');
-        callback(null, rows.rows);
-      }
+      callback(null, rows.rows);
     }
   });
 };

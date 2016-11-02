@@ -2,7 +2,7 @@
   window.__env = window.__env || {};
 
   // API url
-   window.__env.apiUrl = 'http://162.243.154.104';
+  window.__env.apiUrl = 'http://162.243.154.104';
   //window.__env.apiUrl = 'http://127.0.0.1';
   window.__env.port = '3000';
   window.__env.livePort = '8080';
