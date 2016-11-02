@@ -170,6 +170,12 @@ exports.getGroupSites = function(req, res) {
   });
 };
 
+exports.getAllGroups = function(req, res) {
+  groups.getAllGroups(function(err, success) {
+    err ? res.status(404).send(err) : res.send(success);
+  });
+};
+
 
 /***************************************************
   `/API/WEBSITES/*` ENDPOINTS

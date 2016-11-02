@@ -56,6 +56,7 @@ app.use('/api/markups/delete', sessionChecker, routes.deleteMarkup);
 
 
 // Test Routes: no authentication required
+app.use('/test/groups/all', routes.getAllGroups);
 app.use('/test/groups/create', routes.createGroup);
 app.use('/test/groups/add', routes.addMember);
 app.use('/test/users/groups', routes.getUserGroups);
