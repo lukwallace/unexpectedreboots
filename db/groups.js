@@ -36,7 +36,7 @@ exports.create = function(groupName, owner, callback) {
         callback('duplicate group name for specified user', null);
       } else {
 
-        console.log('lookup', owner)
+        console.log('lookup groups for', owner);
 
         pool.query({
           text: 'SELECT u.id FROM users u \

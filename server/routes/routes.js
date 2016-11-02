@@ -113,7 +113,7 @@ exports.getGroupMembers = function(req, res) {
 exports.createGroup = function(req, res) {
   var groupName = req.query.groupName || req.body.groupName;
   var owner = req.query.owner || req.body.owner;
-
+  
   groups.create(groupName, owner, function(err, success) {
     err ? res.status(404).send(err) : res.send(success);
   });
