@@ -23,10 +23,16 @@ class App extends React.Component {
     });
   }
 
+
+  logoutCb() {
+    document.cookies = '';
+    window.close();
+  }
+
   
   render() {
     return (
-      <Views owner={this.state.owner} groupid={this.state.groupid} viewType={this.state.view} changeViewCb={this.changeView.bind(this)} />
+      <Views owner={this.state.owner} groupid={this.state.groupid} viewType={this.state.view} changeViewCb={this.changeView.bind(this)} logoutCb={this.logoutCb.bind(this)}/>
     );
   }
 }
