@@ -26,17 +26,38 @@ angular.module('mainController', ['ui.router'])
       url: destUrl + '/test/users/groups',
       data: {username: username},
       success: (data) => {
-        console.log('GROUPS DATA', data);
-        // alert(JSON.stringify(data));
+        var storageObj = localStorage.getItem('groupsToShareWith');
+        if (storageObj === null) {
+          storageObj = {};
+        } else {
+          storageObj = JSON.parse(storageObj);
+        }
         $scope.groups = [];
         for(var i = 0; i < data.length; i++) {
-          $scope.groups.push(data[i].groupname);
+          storageObj[data[i].groupid] === true ? $scope.groups.push([data[i].groupname, data[i].groupid, true]) : $scope.groups.push([data[i].groupname, data[i].groupid, false]);
         }
-        console.log('$scope.groups', $scope.groups);
+        $scope.$apply();
       },
     }).fail( (data) => {
       console.log('FAIL', data);
     });
   };
+
+
   $scope.getUserGroups();
+
+  $scope.checkboxChanged = function(group, checked) {
+    var storageObj = localStorage.getItem('groupsToShareWith');
+    if (storageObj === null) {
+      storageObj = {};
+    } else {
+      storageObj = JSON.parse(storageObj);
+    }
+    if(checked === true) {
+      storageObj[group[1]] = true;
+    } else {
+      storageObj[group[1]] = false;
+    }
+    localStorage.setItem('groupsToShareWith', JSON.stringify(storageObj));
+  };
 });
