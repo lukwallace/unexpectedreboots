@@ -15,7 +15,7 @@ class MarkupPanel extends React.Component {
       fetch(SERVER_IP + ':3000/test/users/markups', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({username: document.cookie.split('=')[1]}) //TODO: change to username in cookie
+        body: JSON.stringify({username: getUsername()})
       })
       .then(function(res) {
         return res.json();

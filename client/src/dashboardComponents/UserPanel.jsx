@@ -38,7 +38,7 @@ class UserPanel extends React.Component {
           method: 'POST',
           data: {
             groupID: context.props.groupid, 
-            username: document.cookie.split('=')[1],  //TODO: change this to the username in the cookie
+            username: getUsername(),
             newMember: $('.newMember').val()
           },
           success: function(data) {
