@@ -14,6 +14,7 @@ angular.module('mainController', ['ui.router'])
     chrome.cookies.remove({url: liveUrl + '/', name: 'connect.sid'}, function(removedCookie) {
       console.log(removedCookie);
       localStorage.removeItem('username');
+      localStorage.removeItem('groupsToShareWith');
       $state.transitionTo('login');
     });
   };
@@ -47,17 +48,15 @@ angular.module('mainController', ['ui.router'])
   $scope.getUserGroups();
 
   $scope.checkboxChanged = function(group, checked) {
+    if(checked === undefined) return;
+
     var storageObj = localStorage.getItem('groupsToShareWith');
     if (storageObj === null) {
       storageObj = {};
     } else {
       storageObj = JSON.parse(storageObj);
     }
-    if(checked === true) {
-      storageObj[group[1]] = true;
-    } else {
-      storageObj[group[1]] = false;
-    }
+    storageObj[group[1]] = checked;
     localStorage.setItem('groupsToShareWith', JSON.stringify(storageObj));
   };
 });
