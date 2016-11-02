@@ -49,15 +49,19 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
                   }
                 })
               };
-            } 
+            }
           })
         }
       });
     }
   }
 });
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) { 
-  console.log('background script triggered');    
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  var username = localStorage.getItem('username');
+  if (request.text === 'getUsername') {
+    sendResponse({username: username});
+  }
   if (username) {
     var selection = request.selection;
     var destUrl = localStorage.getItem('destUrl');
@@ -79,23 +83,29 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           text: request.text,
           comment: null
         },
-        success: function() {
+        success: function(data) {
           // alert('success');
         }
       });
-
       $.ajax({
         type: 'GET',
         url: destUrl + '/test/users/groups',
         data: {username: username},
         success: function(response) {
+          var shareGroups = localStorage.getItem('groupsToShareWith');
+          if(shareGroups === null) {
+            shareGroups = {};
+          } else {
+            shareGroups = JSON.parse(shareGroups);
+          }
           var postGroups = [];
           if(Array.isArray(response)){
             for(var i = 0; i < response.length; i++) {
-              postGroups.push(response[i].groupid);
+              if(shareGroups[response[i].groupid]) {
+                postGroups.push(response[i].groupid);
+              }
             }
-            // alert(postGroups);
-            for (var j = 0; j <postGroups.length; j++) {
+            for (var j = 0; j < postGroups.length; j++) {
               $.ajax({
                 type: 'POST',
                 url: destUrl + '/test/markups/share',
@@ -118,10 +128,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           }
         }
       });
-
-
     });
-  } 
+  }
 })
 
 

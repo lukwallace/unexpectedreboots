@@ -24,13 +24,13 @@ exports.createUser = function(req, res) {
 
   bcrypt.hash(password, saltRounds, function(error, hash) {
     if (error) {
-      res.status(404).send(error);
+      res.send(error);
     } else {
       password = hash;
 
       users.insert(username, email, password, function(err, result) {
         if (err) {
-          res.status(404).send(err);
+          res.send(err);
         } else {
           createSession(req, res, username, function() {
             res.send(result);
@@ -47,10 +47,10 @@ exports.checkUser = function(req, res) {
 
   users.check(username, password, function(err, result) {
     if (err) {
-      res.status(404).send(err);
+      res.send(err);
     } else {
       if (result.rowCount === 0) {
-        res.status(404).send('user does not exist');
+        res.send('user does not exist');
       } else {        
         var retrievedPassword = result.rows[0].password;
 
@@ -60,7 +60,7 @@ exports.checkUser = function(req, res) {
               res.send(success);
             });
           } else {
-            res.status(404).send(err2);
+            res.send(err2);
           }
         });
       }
@@ -84,7 +84,7 @@ exports.getUserGroups = function(req, res) {
   var username = req.query.username || req.body.username;
 
   users.getGroups(username, function(err, result) {
-    err ? res.status(404).send(err) : res.send(result);
+    err ? res.send(err) : res.send(result);
   });
 };
 
@@ -92,7 +92,7 @@ exports.getUserMarkups = function(req, res) {
   var username = req.query.username || req.body.username;
 
   users.getMarkups(username, function(err, result) {
-    err ? res.status(404).send(err) : res.send(result);
+    err ? res.send(err) : res.send(result);
   });
 };
 
@@ -106,7 +106,7 @@ exports.getGroupMembers = function(req, res) {
   var groupID = req.query.groupID || req.body.groupID;
 
   groups.getMembers(groupID, function(err, result) {
-    err ? res.status(404).send(err) : res.send(result);
+    err ? res.send(err) : res.send(result);
   });
 }
 
@@ -115,7 +115,7 @@ exports.createGroup = function(req, res) {
   var owner = req.query.owner || req.body.owner;
   
   groups.create(groupName, owner, function(err, success) {
-    err ? res.status(404).send(err) : res.send(success);
+    err ? res.send(err) : res.send(success);
   });
 };
 
@@ -136,7 +136,7 @@ exports.addMember = function(req, res) {
   */
 
   groups.add(groupID, username, newMember, function(err, success) {
-    err ? res.status(404).send(err) : res.send(success);
+    err ? res.send(err) : res.send(success);
   });
 };
 
@@ -149,7 +149,7 @@ exports.getGroupMarkups = function(req, res) {
   var groupID = req.query.groupID || req.body.groupID;
 
   groups.getMarkups(groupID, function(err, success) {
-    err ? res.status(404).send(err) : res.send(success);
+    err ? res.send(err) : res.send(success);
   });
 };
 
@@ -157,7 +157,7 @@ exports.getGroupSites = function(req, res) {
   var groupID = req.query.groupID || req.body.groupID;
 
   groups.getSites(groupID, function(err, success) {
-    err ? res.status(404).send(err) : res.send(success);
+    err ? res.send(err) : res.send(success);
   });
 };
 
@@ -178,7 +178,7 @@ exports.createSite = function(req, res) {
   var title = req.query.title || req.body.title;
 
   websites.create(url, title, function(err, success) {
-    err ? res.status(404).send(err) : res.send(success);
+    err ? res.send(err) : res.send(success);
   });
 };
 
@@ -197,7 +197,7 @@ exports.shareSite = function(req, res) {
   */
 
   websites.share(username, groupID, url, title, function(err, success) {
-    err ? res.status(404).send(err) : res.send(success);
+    err ? res.send(err) : res.send(success);
   })
 
 };
@@ -231,7 +231,7 @@ exports.createMarkup = function(req, res) {
   **/
 
   markups.create(url, title, username, anchor, text, comment, function(err, success) {
-    err ? res.status(404).send(err) : res.send(success);
+    err ? res.send(err) : res.send(success);
   });
 };
 
@@ -257,7 +257,7 @@ exports.shareMarkup = function(req, res) {
   **/
 
   markups.share(url, title, username, anchor, text, comment, groupID, function(err, success) {
-    err ? res.status(404).send(err) : res.send(success);
+    err ? res.send(err) : res.send(success);
   });
 };
 
