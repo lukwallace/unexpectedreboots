@@ -3,7 +3,7 @@ var Views = (props) => {
   if (props.viewType === 'home') {
     return (
       <div className='container'>
-        <Heading title={'Dashboard'} changeViewCb={props.changeViewCb} />
+        <Heading title={'Dashboard'} changeViewCb={props.changeViewCb} logoutCb={props.logoutCb}/>
         <MarkupPanel groupid={props.groupid} markups={[1, 2, 3, 4, 5, 6, 7, 8]} />
         <GroupPanel changeViewCb={props.changeViewCb} />
       </div>
@@ -12,7 +12,7 @@ var Views = (props) => {
   //make this the callback to a get request for the user's group data and pass it into the three panels
     return (
       <div className='container'>
-        <Heading title={props.viewType} changeViewCb={props.changeViewCb} />
+        <Heading title={props.viewType} changeViewCb={props.changeViewCb} logoutCb={props.logoutCb}/>
         <UserPanel owner={props.owner} groupid={props.groupid} />
         <MarkupPanel groupid={props.groupid} markups={[1, 2]}/>
         <SharedPanel groupid={props.groupid} sites={[1, 2, 3]}/>
