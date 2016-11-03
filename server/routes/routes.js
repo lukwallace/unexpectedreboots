@@ -292,3 +292,12 @@ exports.createComment = function(req, res) {
     err ? res.status(501).send(err) : res.send(success);
   });
 };
+
+
+exports.getComments = function(req, res) {
+  const markupid = req.body.markupid;
+  const groupids = req.body.groupids;
+  comments.getComments(markupid, groupids, function(err, success) {
+    err ? res.status(404).send(err) : res.send(success);
+  });
+};
