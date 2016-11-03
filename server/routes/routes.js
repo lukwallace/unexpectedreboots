@@ -2,6 +2,7 @@ var users = require('../../db/users');
 var groups = require('../../db/groups');
 var websites = require('../../db/websites');
 var markups = require('../../db/markups');
+var comments = require('../../db/comments');
 
 var bcrypt = require('bcrypt');
 var saltRounds = 10;
@@ -271,5 +272,16 @@ exports.shareMarkup = function(req, res) {
 };
 
 exports.deleteMarkup = function(req, res) {
+
+};
+
+
+exports.createComment = function(req, res) {
+
+
+  const markupid = req.body.markupid;
+  const author = req.body.username;
+  const comment = req.body.comment;
+
 
 };
