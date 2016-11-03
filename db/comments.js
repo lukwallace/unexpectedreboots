@@ -12,7 +12,7 @@ var cleanText = function (text) {
 var updateComment = function(markupid, authorid, comment, callback) {
   pool.query({
     text: 'UPDATE comment c SET c.comment = ' + cleanText(comment) + ' \
-    WHERE c.markupid = ' + markupid + ' AND c.authorid = ' + authorid + ';' 
+    WHERE c.markupid = ' + markupid + ' AND c.authorid = ' + authorid + ';'
   }, function(err, rows) {
     //if error send callback
     if(err) {
@@ -20,7 +20,7 @@ var updateComment = function(markupid, authorid, comment, callback) {
     } else {
       callback(null, rows.rows)
     }
-  }
+  });
 };
 
 var createComment = function(markupid, authorid, comment, callback) {
@@ -35,7 +35,7 @@ var createComment = function(markupid, authorid, comment, callback) {
     } else {
       callback(null, rows.rows)
     }
-  }
+  });
 };
 
 var getUserFromName = function(username, callback) {
@@ -66,6 +66,7 @@ var checkCommentExists = function(markupid, authorid, callback) {
       //no comment
       callback(null, false);
     }
+  });
 };
 
 
@@ -103,7 +104,7 @@ exports.setComment = function(markupid, username, comment, callback) {
         SELECT u.id FROM users u \
         WHERE u.username = \'' + username + '\' \
       );'
-  }, 
+  },
 
   function(err, rows) {
     if (err) {
@@ -112,4 +113,4 @@ exports.setComment = function(markupid, username, comment, callback) {
       callback(null, rows.rows);
     }
   });
-};
+}
