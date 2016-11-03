@@ -284,10 +284,11 @@ exports.deleteMarkup = function(req, res) {
 
 exports.createComment = function(req, res) {
 
-  console.log(req.body.comment, 'in ROUTES SERVER SIDE');
   const markupid = req.body.markupid;
-  const author = req.body.username;
+  const username = req.body.username;
   const comment = req.body.comment;
 
-
+  comments.setComment(markupid, username, comment, function(err, success) {
+    err ? res.status(501).send(err) : res.send(success);
+  });
 };

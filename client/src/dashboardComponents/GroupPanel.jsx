@@ -96,6 +96,7 @@ class GroupPanel extends React.Component {
           success: function(data) {
             if (data === true) {
             //get rid of the modal
+              $('.groupName').val('');
               askGroup.close();
             //rerender the GroupPanel controller
               context.fetchGroups();
@@ -116,6 +117,11 @@ class GroupPanel extends React.Component {
   componentDidMount() {
     this.fetchGroups();
     this.handleGroupCreation();
+  }
+
+  componentWillUnmount() {
+    // Unmounted
+    $('.group').off();
   }
 
   render() {

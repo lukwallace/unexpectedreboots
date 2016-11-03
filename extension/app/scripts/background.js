@@ -13,10 +13,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
         success: function(response) {
           console.log('Got user markups!', response);
           for (var i = 0; i < response.length; i++) {
-            // if (response[i].markupid) {
-            //   alert(response[i]);
-            // }
-            // alert(response[i]);
             if (tabUrl === response[i].url) {
               userMarkups.push(response[i]);
             }
@@ -49,7 +45,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
                     } else {
                       shareGroups = JSON.parse(shareGroups);
                     }
-                    
 
                     var groupMarkups = [];
                     if(shareGroups[response[1]]) {
@@ -102,6 +97,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         },
         success: function(data) {
           // alert('success');
+          // alert(data[0]);
         }
       });
 

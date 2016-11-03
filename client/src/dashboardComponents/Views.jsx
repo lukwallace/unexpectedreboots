@@ -24,6 +24,9 @@ class Views extends React.Component {
               leaveGroup.close();
             //TODO: reroute to home page?
               console.log('Server removed you from group');
+              context.props.changeViewCb(null, 'home', null, null);
+              // console.log($('.heading > a'));
+              // $('.heading > a').click();
             } else {
             //get rid of the modal
               leaveGroup.close();
@@ -60,9 +63,13 @@ class Views extends React.Component {
         <div className='container'>
           <Heading title={this.props.viewType} changeViewCb={this.props.changeViewCb} logoutCb={this.props.logoutCb} />        
           <UserPanel owner={this.props.owner} groupid={this.props.groupid} />
-          <MarkupPanel groupid={this.props.groupid} markups={[1, 2]} />
-          <SharedPanel groupid={this.props.groupid} sites={[1, 2, 3]} />
-          <LeaveGroupButton groupid={this.props.groupid} />
+          <div className='row'>
+            <MarkupPanel groupid={this.props.groupid} markups={[1, 2]} />
+            <SharedPanel groupid={this.props.groupid} sites={[1, 2, 3]} />
+          </div>
+          <div className='row'>
+            <LeaveGroupButton groupid={this.props.groupid} />
+          </div>
         </div>
       ); 
     }
