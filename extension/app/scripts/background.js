@@ -13,7 +13,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
         success: function(response) {
           console.log('Got user markups!', response);
           for (var i = 0; i < response.length; i++) {
-            alert(Object.entries(response[i]));
+            // alert(Object.entries(response[i]));
             if (tabUrl === response[i].url) {
               userMarkups.push(response[i]);
             }
@@ -88,6 +88,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         },
         success: function(data) {
           // alert('success');
+          // alert(data[0]);
         }
       });
       $.ajax({
