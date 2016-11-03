@@ -1,8 +1,8 @@
-// $(document).ready(function() {
-
 vex.defaultOptions.className = 'vex-theme-os';
 
+var serverUrl = 'http://127.0.0.1:3000';
 var globalGroups = [];
+var globalGroupIds = [];
 var username = undefined;
 var test = null;
 
@@ -18,12 +18,13 @@ chrome.runtime.sendMessage({
   username = response.username;
   $.ajax({
     type: 'GET',
-    url: 'http://127.0.0.1:3000' + '/test/users/groups',
+    url: serverUrl + '/test/users/groups',
     data: {username: username},
     success: (data) => {
       console.log(data[0]);
       for(var i = 0; i < data.length; i++) {
         globalGroups.push(data[i].groupname);
+        globalGroupIds.push(data[i].groupid);
       }
       console.log(globalGroups, 'globalGROUPS');
     },
@@ -68,7 +69,7 @@ var sendComment = function (markupid, comment) {
     username = response.username;
     $.ajax({
       type: 'POST',
-      url: 'http://127.0.0.1:3000' + '/test/comments/create',
+      url: serverUrl + '/test/comments/create',
       data: {username: username, markupid: markupid, comment: comment},
       success: (data) => {
         console.log(data, 'inside of Send Comment');
@@ -92,7 +93,7 @@ var elements = document.querySelectorAll("p, li, em, span, h1, h2, h3, h4, h5, t
 
 var postSelection = function(targetText, groups, comment) {
   var testExport = editor.exportSelection();
-  console.log(uniqGroup, comment);
+  // console.log(groups, comment);
   chrome.runtime.sendMessage({
     action: 'add',
     selection: JSON.stringify(testExport),
@@ -259,6 +260,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       }
       var firstInsertedNode = fragment.firstChild;
       var lastInsertedNode = fragment.lastChild;
+      var flag = false;
       range.insertNode(fragment);
       if (firstInsertedNode) {
         range.setStartBefore(firstInsertedNode);
@@ -268,7 +270,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       sel.addRange(range);
     }
     $('#markupid_' + markupId).click(function () {
-      addComment(markupId);
+      if (!flag) {
+        addComment(markupId);
+        flag = true;
+      }
     });
   }
 });
