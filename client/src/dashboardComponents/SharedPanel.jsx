@@ -21,9 +21,11 @@ class SharedPanel extends React.Component {
     })
     .then(function(value) {
       console.log(value);
-      context.setState({
-        sites: value
-      });
+      if(Array.isArray(value)) {
+        context.setState({
+          sites: value
+        });
+      }
     }); 
   }
 
