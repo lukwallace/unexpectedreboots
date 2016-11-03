@@ -50,7 +50,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
                       shareGroups = JSON.parse(shareGroups);
                     }
                     
-                    
 
                     var groupMarkups = [];
                     if(shareGroups[response[1]]) {
