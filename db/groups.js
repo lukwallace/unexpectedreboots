@@ -192,26 +192,23 @@ exports.add = function(groupID, username, newMember, callback) {
                       if (err4) {
                         callback(err4, null);
                       } else {
-                        if (rows4.rowCount >= 6) {
-                          callback('group is full', null);
-                        } else {
+                       
+                        pool.query({
+                          // select newmemberID and insert it into the relevant group
+                          text: 'INSERT INTO usersgroups \
+                            VALUES ( \
+                              ( \
+                              SELECT u.id FROM users u \
+                              WHERE u.username = \'' + newMember + '\' \
+                              ),' +
+                              groupID +
+                            ');'
+                        }, 
 
-                          pool.query({
-                            // select newmemberID and insert it into the relevant group
-                            text: 'INSERT INTO usersgroups \
-                              VALUES ( \
-                                ( \
-                                SELECT u.id FROM users u \
-                                WHERE u.username = \'' + newMember + '\' \
-                                ),' +
-                                groupID +
-                              ');'
-                          }, 
-
-                          function(err5, rows5) {
-                            err5 ? callback(err5, null) : callback(null, true);
-                          });
-                        }
+                        function(err5, rows5) {
+                          err5 ? callback(err5, null) : callback(null, true);
+                        });
+                      
                       }
                     });
                   }
@@ -225,8 +222,8 @@ exports.add = function(groupID, username, newMember, callback) {
   });
 };
 
-exports.remove = function(groupID, username, callback) {
-  console.log('/**', username, 'is leaving group:', groupID, '**/');
+exports.remove = function(owner, groupID, username, callback) {
+  console.log('/**', owner ? 'Owner' : '', username, 'is leaving group:', groupID, ' **/');
 
   pool.query({
     text: 'DELETE FROM usersgroups \
@@ -236,7 +233,11 @@ exports.remove = function(groupID, username, callback) {
   },
 
   function(err, rows) {
-    err ? callback(err, null) : callback(null, true);
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, true);
+    }
   });
 
 
