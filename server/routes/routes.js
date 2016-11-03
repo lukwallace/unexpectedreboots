@@ -165,7 +165,7 @@ exports.getGroupMarkups = function(req, res) {
   var groupID = req.query.groupID || req.body.groupID;
 
   groups.getMarkups(groupID, function(err, success) {
-    err ? res.send(err) : res.send(success);
+    err ? res.send(err) : res.send([success, groupID]);
   });
 };
 

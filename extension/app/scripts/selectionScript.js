@@ -80,7 +80,7 @@ var elements = document.querySelectorAll("p, li, em, span, h1, h2, h3, h4, h5, t
 
 var postSelection = function(targetText, groups, comment) {
   var testExport = editor.exportSelection();
-  console.log(testExport, 'test export');
+  console.log(uniqGroup, comment);
   chrome.runtime.sendMessage({
     action: 'add',
     selection: JSON.stringify(testExport),
@@ -114,6 +114,7 @@ $('body').delegate('button.medium-editor-action.medium-editor-button-last', 'cli
               console.log('Cancelled');
           } else {
               console.log('Comment', data.comment);
+              postSelection(test, null, data.comment);
           }
       }
   })
@@ -201,7 +202,8 @@ editor = new MediumEditor(elements, {
         start: '<span onclick="onClickSelectionCb" style="background-color: powderblue;">',
         end: '</span>',
         action: function(html, mark) {
-          postSelection(html);
+          test = html;
+          // postSelection(html);
           return html;
         }
       })

@@ -25,29 +25,29 @@ class GroupPanel extends React.Component {
       context.setState({
         groups: value
       });
-    });
-
-    //then get all groups
-    fetch(SERVER_IP + ':3000/test/groups/all', {
-      method: 'GET',
-      headers: {'Content-Type': 'application/json'}
-    })
-    .then(function(res) {
-      return res.json();
-    })
-    .then(function(value) {
-      //filter out groups you are already in
-      var yourGroupIds = context.state.groups.map(function(group) {
-        return group.id;
-      });
-      var unjoinedGroups = value.filter(function(group) {
-        return yourGroupIds.indexOf(group.id) === -1;
-      });
-
-      context.setState({
-        allGroups: unjoinedGroups
+          //then get all groups
+      fetch(SERVER_IP + ':3000/test/groups/all', {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then(function(res) {
+        return res.json();
+      })
+      .then(function(value) {
+        //filter out groups you are already in
+        var yourGroupIds = context.state.groups.map(function(group) {
+          return group.groupid;
+        });
+        var unjoinedGroups = value.filter(function(group) {
+          return yourGroupIds.indexOf(group.id) === -1;
+        });
+        context.setState({
+          allGroups: unjoinedGroups
+        });
       });
     });
+
+
 
   }
 
@@ -71,7 +71,6 @@ class GroupPanel extends React.Component {
         username: getUsername() 
       }
     }).done( (data) => {
-      console.log('join group data', data);
       if(data === true) {
         context.fetchGroups();
       }
@@ -97,6 +96,7 @@ class GroupPanel extends React.Component {
           success: function(data) {
             if (data === true) {
             //get rid of the modal
+              $('.groupName').val('');
               askGroup.close();
             //rerender the GroupPanel controller
               context.fetchGroups();
@@ -117,6 +117,11 @@ class GroupPanel extends React.Component {
   componentDidMount() {
     this.fetchGroups();
     this.handleGroupCreation();
+  }
+
+  componentWillUnmount() {
+    // Unmounted
+    $('.group').off();
   }
 
   render() {
