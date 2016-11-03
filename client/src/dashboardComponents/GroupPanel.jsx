@@ -36,8 +36,16 @@ class GroupPanel extends React.Component {
       return res.json();
     })
     .then(function(value) {
+      //filter out groups you are already in
+      var yourGroupIds = context.state.groups.map(function(group) {
+        return group.id;
+      });
+      var unjoinedGroups = value.filter(function(group) {
+        return yourGroupIds.indexOf(group.id) === -1;
+      });
+
       context.setState({
-        allGroups: value
+        allGroups: unjoinedGroups
       });
     });
 
@@ -64,7 +72,7 @@ class GroupPanel extends React.Component {
       }
     }).done( (data) => {
       console.log('join group data', data);
-      if(data) {
+      if(data === true) {
         context.fetchGroups();
       }
     }).fail( (err) => {

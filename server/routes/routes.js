@@ -109,7 +109,7 @@ exports.getGroupMembers = function(req, res) {
   groups.getMembers(groupID, function(err, result) {
     err ? res.send(err) : res.send(result);
   });
-}
+};
 
 exports.createGroup = function(req, res) {
   var groupName = req.query.groupName || req.body.groupName;
@@ -153,6 +153,12 @@ exports.addMember = function(req, res) {
 exports.editGroup = function(req, res) {
   // TODO:
   // This endpoint should allow owners to remove members from a group
+  var groupID = req.query.groupID || req.body.groupID;
+  var username = req.query.username || req.body.username;
+
+  groups.remove(groupID, username, function(err, success) {
+    err ? res.send(err) : res.send(success);
+  });
 };
 
 exports.getGroupMarkups = function(req, res) {

@@ -35,9 +35,7 @@ exports.create = function(groupName, owner, callback) {
       if (rows.rowCount > 0) {
         callback('duplicate group name for specified user', null);
       } else {
-
         console.log('lookup groups for', owner);
-
         pool.query({
           text: 'SELECT u.id FROM users u \
           WHERE u.username = \'' + owner + '\''
@@ -47,7 +45,7 @@ exports.create = function(groupName, owner, callback) {
           if (err2) {
             callback(err2, null);
           } else {
-            if(!rows2.rows[0]) {
+            if (!rows2.rows[0]) {
               console.log('ERROR: row2', rows2);
               return;
             }
@@ -227,6 +225,22 @@ exports.add = function(groupID, username, newMember, callback) {
   });
 };
 
+exports.remove = function(groupID, username, callback) {
+  console.log('/**', username, 'is leaving group:', groupID, '**/');
+
+  pool.query({
+    text: 'DELETE FROM usersgroups \
+           WHERE usersgroups.groupid = \'' + groupID + '\' \
+           AND usersgroups.userid \
+           IN (SELECT id FROM users WHERE username = \'' + username + '\')' 
+  },
+
+  function(err, rows) {
+    err ? callback(err, null) : callback(null, true);
+  });
+};
+
+
 exports.getMembers = function(groupID, callback) {
 
   pool.query({
@@ -276,7 +290,7 @@ exports.getMarkups = function(groupID, callback) {
           SELECT mg.markupid FROM markupsgroups mg \
           WHERE mg.groupid = \'' + groupID + '\' \
         ) \
-      ) temp left join users u2 \
+      ) temp LEFT JOIN users u2 \
       ON temp.authorid = u2.id \
       LEFT JOIN sites s2 \
       ON temp.siteID = s2.id;'
@@ -298,7 +312,7 @@ exports.getSites = function(groupID, callback) {
       FROM ( \
         SELECT sg.groupid AS groupid, \
           sg.siteid AS siteid, \
-          sg.sharedby AS sharedby \
+          sg.sharedby AS sharedby, \
           sg.sharedat AS sharedat \
           FROM sitesgroups sg \
           WHERE sg.groupid = \'' + groupID + '\' \

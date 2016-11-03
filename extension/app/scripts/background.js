@@ -11,6 +11,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
         url: destUrl + '/test/users/markups',
         data: {username: username},
         success: function(response) {
+          console.log('Got user markups!', response);
           for (var i = 0; i < response.length; i++) {
             if (tabUrl === response[i].url) {
               userMarkups.push(response[i]);
@@ -26,8 +27,9 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
             data: {username: username},
             success: function(response) {
               // alert('called api/users/groups');
+              console.log('Got groups!', response);
               var groups = [];
-              for(var i = 0; i< response.length; i++) {
+              for(var i = 0; i < response.length; i++) {
                 groups.push(response[i].groupid);
               }
               //get all messages from groups
@@ -42,10 +44,11 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
                       if (tabUrl === response[x].url) {
                         groupMarkups.push(response[x]);
                       }
-                    };
+                    }
+
                     if (groupMarkups.length) {
                     chrome.tabs.sendMessage(tab, {selection: groupMarkups});
-                    };
+                    }
                   }
                 })
               };
@@ -61,8 +64,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   var username = localStorage.getItem('username');
   if (request.text === 'getUsername') {
     sendResponse({username: username});
-  }
-  if (username) {
+  } else if (username) {
     var selection = request.selection;
     var destUrl = localStorage.getItem('destUrl');
     var url = '';
@@ -98,13 +100,19 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           } else {
             shareGroups = JSON.parse(shareGroups);
           }
-          var postGroups = [];
+
+          var postGroups = request.groups;
+
           if(Array.isArray(response)){
             for(var i = 0; i < response.length; i++) {
+              // var temp = response[i].groupid;
               if(shareGroups[response[i].groupid]) {
-                postGroups.push(response[i].groupid);
+                if (!postGroups.includes(response[i].groupid)) {
+                  postGroups.push(response[i].groupid);
+                }
               }
             }
+
             for (var j = 0; j < postGroups.length; j++) {
               $.ajax({
                 type: 'POST',
