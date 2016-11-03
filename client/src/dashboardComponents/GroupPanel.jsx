@@ -22,7 +22,6 @@ class GroupPanel extends React.Component {
       return res.json();
     })
     .then(function(value) {
-      console.log('YOUR GROUPS', value);
       context.setState({
         groups: value
       });
@@ -35,16 +34,13 @@ class GroupPanel extends React.Component {
         return res.json();
       })
       .then(function(value) {
-        console.log('ALL GROUPS', value);
         //filter out groups you are already in
         var yourGroupIds = context.state.groups.map(function(group) {
           return group.groupid;
         });
-        console.log('YOUR GROUP IDS', yourGroupIds);
         var unjoinedGroups = value.filter(function(group) {
           return yourGroupIds.indexOf(group.id) === -1;
         });
-        console.log('UNJOINED GROUPS', unjoinedGroups);
         context.setState({
           allGroups: unjoinedGroups
         });
@@ -75,7 +71,6 @@ class GroupPanel extends React.Component {
         username: getUsername() 
       }
     }).done( (data) => {
-      console.log('join group data', data);
       if(data === true) {
         context.fetchGroups();
       }
