@@ -40,19 +40,30 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
               for(var j = 0; j < groups.length; j++) {
                 $.ajax({
                   type: 'GET',
-                  url: destUrl + '/api/groups/markups',
+                  url: destUrl + '/test/groups/markups',
                   data: {groupID: groups[j]},
                   success: function(response) {
-                    var groupMarkups = [];
-                    for (var x = 0; x < response.length; x++) {
-                      if (tabUrl === response[x].url) {
-                        groupMarkups.push(response[x]);
-                      }
+                    var shareGroups = localStorage.getItem('groupsToShareWith');
+                    if(shareGroups === null) {
+                      shareGroups = {};
+                    } else {
+                      shareGroups = JSON.parse(shareGroups);
                     }
+                    
+                    
 
-                    if (groupMarkups.length) {
-                    chrome.tabs.sendMessage(tab, {selection: groupMarkups});
-                    }
+                    var groupMarkups = [];
+                    if(shareGroups[response[1]]) {
+                      for (var x = 0; x < response[0].length; x++) {
+                        if (tabUrl === response[0][x].url) {
+                          groupMarkups.push(response[0][x]);
+                        }
+                      }
+
+                      if (groupMarkups.length) {
+                      chrome.tabs.sendMessage(tab, {selection: groupMarkups});
+                      }
+                    }  
                   }
                 })
               };
