@@ -30,6 +30,45 @@ chrome.runtime.sendMessage({
   })
 });
 
+var addComment = function (markupid) {
+  vex.dialog.open({
+      message: 'Enter your comment',
+      input: [
+          '<input name="comment" type="text" autocomplete="off" required />'
+      ].join(''),
+      buttons: [
+          $.extend({}, vex.dialog.buttons.YES, { text: 'Enter' }),
+          $.extend({}, vex.dialog.buttons.NO, { text: 'Cancel' })
+      ],
+      callback: function (data) {
+          if (!data) {
+              console.log('Cancelled');
+          } else {
+              // postSelection(test, data.selectGroups, data.comment);
+              sendComment(markupid, data.comment);
+              console.log('Comment', data.comment);
+          }
+      }
+  })
+}
+
+var sendComment = function (markupid, comment) {
+  chrome.runtime.sendMessage({
+    text: 'getUsername'
+  }, function(response) {
+    username = response.username;
+    $.ajax({
+      type: 'POST',
+      url: 'http://127.0.0.1:3000' + '/test/comments/create',
+      data: {username: username, markupid: markupid, comment: comment},
+      success: (data) => {
+        console.log(data, 'inside of Send Comment');
+        // console.log(globalGroups, 'globalGROUPS');
+      },
+    })
+  });
+};
+
 
 var elements = document.querySelectorAll("p, li, em, span, h1, h2, h3, h4, h5, td, tr, th, tbody");
 
@@ -39,14 +78,14 @@ var elements = document.querySelectorAll("p, li, em, span, h1, h2, h3, h4, h5, t
       POST SELECTION AND SEND TO BACKGROUND.JS
 ****************************************************/
 
-var postSelection = function(targetText, uniqGroup, comment) {
+var postSelection = function(targetText, groups, comment) {
   var testExport = editor.exportSelection();
   console.log(uniqGroup, comment);
   chrome.runtime.sendMessage({
     action: 'add',
     selection: JSON.stringify(testExport),
     text: targetText,
-    groups: uniqGroup,
+    groups: groups,
     comment: comment
   }, function(response) {
 
@@ -60,6 +99,7 @@ var postSelection = function(targetText, uniqGroup, comment) {
 
 
 $('body').delegate('button.medium-editor-action.medium-editor-button-last', 'click', function() {
+  // addComment();
   vex.dialog.open({
       message: 'Enter your comment',
       input: [
@@ -111,6 +151,16 @@ $('body').delegate('button.medium-editor-action.medium-editor-button-first', 'cl
   })
 });
 
+
+// $('body').append('<script> function onClickSelectionCb () {alert("this is working")}; </script>');
+
+$('<script>var onClickSelectionCb = function () {alert("this is working")}</' + 'script>').appendTo(document.head);
+
+// $('<h1> hello dude </h1>').appendTo('body');
+
+// $('.body').html('hello maaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaan');
+
+
 /***************************************************
               MARKUP TOOLBAR
 ****************************************************/
@@ -130,6 +180,9 @@ editor = new MediumEditor(elements, {
         end: '</span>',
         action: function(html, mark) {
           test = html;
+          // $('.testClass').click(function () {
+          //   alert('this is working bro');
+          // });
           // postSelection(html);
           console.log('error');
           return html;
@@ -137,7 +190,7 @@ editor = new MediumEditor(elements, {
       }),
       'sendSelection': new MediumButton({
         label: 'Share with All',
-        start: '<span style="background-color: powderblue;">',
+        start: '<span onclick="onClickSelectionCb" style="background-color: powderblue;">',
         end: '</span>',
         action: function(html, mark) {
           postSelection(html);
@@ -146,7 +199,7 @@ editor = new MediumEditor(elements, {
       }),
       'sendWithComments': new MediumButton({
         label: 'Share and Add Comment',
-        start: '<span style="background-color: powderblue;">',
+        start: '<span onclick="onClickSelectionCb" style="background-color: powderblue;">',
         end: '</span>',
         action: function(html, mark) {
           test = html;
@@ -168,6 +221,10 @@ var userSet = {};
 var numbers = [0,1,2,3,4]
 
 
+var commentPost = function (id) {
+
+};
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log(request, 'request');
 
@@ -178,16 +235,19 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       userSet[allSelections[i].author] = numbers.splice(0,1);
     }
     var importedSelection = JSON.parse(allSelections[i].anchor);
+    var markupId = JSON.parse(allSelections[i].markupid);
+
     editor.importSelection(importedSelection);
 
     // <a href="#" class="markable-tooltip" style="background-color: yellow;">' + getCurrentSelection() + '<span> Testing a long tooltip </a>';
 
-    var html = '<span class="markable-tooltip"' +
+    var html = '<span class="markable-tooltip"' + 'id="markupid_' + markupId + '"' +
       'style="background-color:' + colors[userSet[allSelections[i].author]] +
       ';">' + getCurrentSelection() + '<span class="markable-tooltip-popup">' + allSelections[i].author
       + '<br>' + moment(allSelections[i].createdat).twitterShort() + ' ago</span></span>';
     var sel = window.getSelection();
     var range;
+
     //Set new Content
     if (sel.getRangeAt && sel.rangeCount) {
       range = window.getSelection().getRangeAt(0);
@@ -217,7 +277,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       sel.removeAllRanges();
       sel.addRange(range);
     }
-
+    $('#markupid_' + markupId).click(function () {
+      addComment(markupId);
+    });
   }
 });
 
