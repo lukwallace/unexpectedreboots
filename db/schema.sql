@@ -50,3 +50,13 @@ CREATE TABLE sitesgroups (
   PRIMARY KEY (groupid, siteid, sharedat)
 );
 
+
+CREATE TABLE comments (
+  id        BIGSERIAL     PRIMARY KEY,
+  markupid  BIGSERIAL     references markups(id),
+  authorid  BIGSERIAL     references users(id),
+  comment   VARCHAR(2048),
+  createdat TIMESTAMPTZ   NOT NULL DEFAULT now()
+);
+
+
