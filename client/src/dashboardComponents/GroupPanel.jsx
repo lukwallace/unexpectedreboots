@@ -48,6 +48,7 @@ class GroupPanel extends React.Component {
   }
 
   joinGroupCb(event) {
+    this.toggleDropdownCb(event);
     const groupIndex = $(event.target).closest('li').index();
     this.joinGroupAjax(this.state.allGroups[groupIndex].id);
   }
@@ -63,8 +64,8 @@ class GroupPanel extends React.Component {
       }
     }).done( (data) => {
       console.log('join group data', data);
-      if(data === true) {
-        fetchGroups();
+      if(data) {
+        context.fetchGroups();
       }
     }).fail( (err) => {
       console.log('join group err', err);
@@ -121,7 +122,7 @@ class GroupPanel extends React.Component {
           return (group.userid === group.groupowner);
         }).map((group) => {
           return (
-            <div key={group.groupID}>
+            <div key={group.groupid}>
               <Group group={group} changeViewCb={this.props.changeViewCb} />
             </div>
         ); }) }
@@ -130,7 +131,7 @@ class GroupPanel extends React.Component {
           return (group.userid !== group.groupowner);
         }).map((group) => {
           return (
-            <div key={group.groupID}>
+            <div key={group.groupid}>
               <Group group={group} changeViewCb={this.props.changeViewCb} />
             </div>
         ); }) }
