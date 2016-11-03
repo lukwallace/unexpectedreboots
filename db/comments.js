@@ -1,6 +1,7 @@
 var pg = require('pg');
 var Pool = require('pg').Pool;
-var CONNECTION = 'postgres://admin:rQUNyC8W9YT7ZZBW@localhost:5432/markable'
+var CONNECTION = 'postgres://admin:rQUNyC8W9YT7ZZBW@localhost:5432/markable';
+var Promise = require("bluebird");
 
 var client = new pg.Client(CONNECTION);
 
@@ -80,6 +81,42 @@ var checkCommentExists = function(markupid, authorid, callback) {
 };
 
 
+var getCommmentsByMarkup = function(markupid, callback) {
+    pool.query({
+      text: 'SELECT * FROM comments WHERE markupid = \'' + markupid + '\;'
+    }, function(err, rows) {
+    if(err) {
+      callback(err, null);
+    } else if (rows.rowCount) {
+      //comments exists
+      callback(null, rows.rows);
+    } else {
+      //no comments
+      callback(null, []);
+    }
+  });
+
+}
+
+var checkGroupMarkupExists = function(markupid, groupid, callback) {
+    pool.query({
+      text: 'SELECT * FROM markupsgroups WHERE markupid = \'' + markupid + '\' \
+      AND groupid = \'' + groupid +'\' ;'
+    }, function(err, rows) {
+    if(err) {
+      callback(err, null);
+    } else if (rows.rowCount) {
+      //entry exists
+      callback(null, true);
+    } else {
+      //no entry
+      callback(null, false);
+    }
+  });
+}
+
+
+
 exports.setComment = function(markupid, username, comment, callback) {
   console.log('in set comment', comment);
   //first get userid
@@ -101,3 +138,38 @@ exports.setComment = function(markupid, username, comment, callback) {
     }
   });
 };
+
+
+
+exports.getComments = function(markupid, groupids, callback) {
+  //first grab comments
+  getCommmentsByMarkup(markupid, function(err, commments) {
+    if(err) {
+      //found error
+      callback(err, null);
+    } else if (!comments) {
+      //if no comments found, send empty array back
+      callback(null, []);
+    } else {
+      var foundAny = false;
+      groupids.forEach((groupid) => {
+        //quit if we are done
+        if (foundAny) {
+          return;
+        }
+        //now check if the markup is part of any of the groups we are using
+        checkGroupMarkupExists(markupid, groupid, (err, exists) => {
+          //no error callback because we can check other groups
+          if (!err && exists && !foundAny) {
+            callback(null, comments);
+            foundAny = true;
+            return;
+          }
+        });
+      });
+      //markup not in our group so move send back empty array;
+      callback(null, []);
+    }
+  });
+};
+
