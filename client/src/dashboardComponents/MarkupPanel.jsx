@@ -36,7 +36,7 @@ class MarkupPanel extends React.Component {
       })
       .then(function(value) {
         context.setState({
-          markups: value
+          markups: value[0]
         });
       }); 
     }
