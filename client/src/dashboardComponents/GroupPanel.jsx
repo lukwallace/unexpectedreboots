@@ -22,32 +22,36 @@ class GroupPanel extends React.Component {
       return res.json();
     })
     .then(function(value) {
+      console.log('YOUR GROUPS', value);
       context.setState({
         groups: value
       });
+          //then get all groups
+      fetch(SERVER_IP + ':3000/test/groups/all', {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json'}
+      })
+      .then(function(res) {
+        return res.json();
+      })
+      .then(function(value) {
+        console.log('ALL GROUPS', value);
+        //filter out groups you are already in
+        var yourGroupIds = context.state.groups.map(function(group) {
+          return group.groupid;
+        });
+        console.log('YOUR GROUP IDS', yourGroupIds);
+        var unjoinedGroups = value.filter(function(group) {
+          return yourGroupIds.indexOf(group.id) === -1;
+        });
+        console.log('UNJOINED GROUPS', unjoinedGroups);
+        context.setState({
+          allGroups: unjoinedGroups
+        });
+      });
     });
 
-    //then get all groups
-    fetch(SERVER_IP + ':3000/test/groups/all', {
-      method: 'GET',
-      headers: {'Content-Type': 'application/json'}
-    })
-    .then(function(res) {
-      return res.json();
-    })
-    .then(function(value) {
-      //filter out groups you are already in
-      var yourGroupIds = context.state.groups.map(function(group) {
-        return group.id;
-      });
-      var unjoinedGroups = value.filter(function(group) {
-        return yourGroupIds.indexOf(group.id) === -1;
-      });
 
-      context.setState({
-        allGroups: unjoinedGroups
-      });
-    });
 
   }
 
