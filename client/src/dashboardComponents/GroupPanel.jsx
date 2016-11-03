@@ -45,7 +45,7 @@ class GroupPanel extends React.Component {
       });
 
       context.setState({
-        allGroups: unjoinedGroups;
+        allGroups: unjoinedGroups
       });
     });
 
