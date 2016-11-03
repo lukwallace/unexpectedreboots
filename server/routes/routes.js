@@ -52,7 +52,7 @@ exports.checkUser = function(req, res) {
     } else {
       if (result.rowCount === 0) {
         res.send('user does not exist');
-      } else {        
+      } else {
         var retrievedPassword = result.rows[0].password;
 
         bcrypt.compare(password, retrievedPassword, function(err2, success) {
@@ -114,7 +114,7 @@ exports.getGroupMembers = function(req, res) {
 exports.createGroup = function(req, res) {
   var groupName = req.query.groupName || req.body.groupName;
   var owner = req.query.owner || req.body.owner;
-  
+
   groups.create(groupName, owner, function(err, success) {
     err ? res.send(err) : res.send(success);
   });
@@ -142,7 +142,7 @@ exports.addMember = function(req, res) {
   4. Get newmember ID from newmember username
   5. Check if new member already exists in UG join table --> callback false
   6. Check if group is full --> callback false
-  7. Insert member + group into UG join table 
+  7. Insert member + group into UG join table
   */
 
   groups.add(groupID, username, newMember, function(err, success) {
@@ -236,7 +236,7 @@ exports.createMarkup = function(req, res) {
   var text = req.query.text || req.body.text;
   var comment = req.query.comment || req.body.comment;
 
-  /** 
+  /**
   DB Logic for markup creation:
   1. Find userID from username
   2. Find siteID from site, if found, use siteID
@@ -260,7 +260,7 @@ exports.shareMarkup = function(req, res) {
   var comment = req.query.comment || req.body.comment;
   var groupID = req.query.groupID || req.body.groupID;
 
-  /** 
+  /**
   DB Logic for markup sharing:
   1. Find userID from username
   2. Find siteID from site, if found, use siteID
@@ -289,6 +289,6 @@ exports.createComment = function(req, res) {
   const comment = req.body.comment;
 
   comments.setComment(markupid, username, comment, function(err, success) {
-    err ? res.status(501)send(err) : res.send(success);
+    err ? res.status(501).send(err) : res.send(success);
   });
 };
