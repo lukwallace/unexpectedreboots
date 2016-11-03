@@ -37,7 +37,9 @@ class GroupPanel extends React.Component {
     })
     .then(function(value) {
       context.setState({
-        allGroups: value
+        allGroups: value.filter(function(group) {
+          return context.state.groups.indexOf(group) === -1;
+        });
       });
     });
 
@@ -64,7 +66,7 @@ class GroupPanel extends React.Component {
     }).done( (data) => {
       console.log('join group data', data);
       if(data === true) {
-        fetchGroups();
+        context.fetchGroups();
       }
     }).fail( (err) => {
       console.log('join group err', err);
