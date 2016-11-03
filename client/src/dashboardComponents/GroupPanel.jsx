@@ -54,6 +54,7 @@ class GroupPanel extends React.Component {
   }
 
   joinGroupAjax(groupID) {
+    var context = this;
     $.ajax({
       url: SERVER_IP + ':3000/api/groups/join',
       method: 'POST',
@@ -63,6 +64,9 @@ class GroupPanel extends React.Component {
       }
     }).done( (data) => {
       console.log('join group data', data);
+      if(data) {
+        context.fetchGroups();
+      }
     }).fail( (err) => {
       console.log('join group err', err);
     });
