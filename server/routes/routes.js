@@ -279,7 +279,11 @@ exports.shareMarkup = function(req, res) {
 };
 
 exports.deleteMarkup = function(req, res) {
+  const markupid = req.body.markupid;
 
+  markups.deleteMarkup(markupid, function(err, success) {
+    err ? res.status(501).send(err) : res.send(success);
+  });
 };
 
 
