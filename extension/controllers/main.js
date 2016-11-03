@@ -21,6 +21,7 @@ angular.module('mainController', ['ui.router'])
 
   $scope.getUserGroups = function() {
     const username = localStorage.getItem('username');
+    $scope.username = username;
     const destUrl = localStorage.getItem('destUrl');
     $.ajax({
       type: 'GET',
