@@ -45,8 +45,6 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
                     } else {
                       shareGroups = JSON.parse(shareGroups);
                     }
-                    
-                    
 
                     var groupMarkups = [];
                     if(shareGroups[response[1]]) {
@@ -59,7 +57,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab ) {
                       if (groupMarkups.length) {
                       chrome.tabs.sendMessage(tab, {selection: groupMarkups});
                       }
-                    }  
+                    }
                   }
                 })
               };
@@ -113,7 +111,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         },
         success: function(data) {
           // console.log('success');
-          alert('success');
+          // alert('success');
           $.ajax({
             type: 'GET',
             url: destUrl + '/test/users/markups',
@@ -123,9 +121,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
               console.log('Got user markups!', response);
               for (var i = 0; i < response.length; i++) {
                 if (response[i].markupid) {
-                  alert(response[i].markupid);
+                  // alert(response[i].markupid);
                 }
-                alert(response[i]);
+                // alert(response[i]);
               }
             }
           });

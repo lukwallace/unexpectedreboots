@@ -1,8 +1,7 @@
 <div>
-  <h1>Welcome to our app! :-)</h1>
-  <button ng-click="testSession()">click to go to dashboard</button>
-  <button ng-click="signOut()">Sign out here</button>
-  <div>Share Markups With:</div>
+  <h2>Welcome back {{username}}!</h2>
+  <button ng-click="testSession()">Click to go to dashboard</button>
+  <div>Active Groups:</div>
   <div ng-repeat="group in groups track by $index">
    <label ng-click="checkboxChanged(group, !group[2])">
      <input
@@ -14,4 +13,6 @@
      > {{group[0]}} </br>
    </label>
   </div>
+  <div ng-show="groups.length === 0">You are not a member of any groups</div>
+  </br><button ng-click="signOut()">Sign out</button></br>
 </div>
