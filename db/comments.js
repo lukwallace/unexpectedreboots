@@ -121,11 +121,11 @@ exports.setComment = function(markupid, username, comment, callback) {
   console.log('in set comment', comment);
   //first get userid
   getUserFromName(username, function(err, user) {
-    console.log('error', err, 'user!!!!!!!', user, 'USERNAME', user.username, user.id);
     if(err) {
       callback(err, null);
     } else {
       const authorid = user.id;
+      console.log('Set comment for user ' + username + ' markupid ' + markupid);
       checkCommentExists(markupid, authorid, function(err, exists) {
         console.log('check comment exists', exists);
         //if exists, update
