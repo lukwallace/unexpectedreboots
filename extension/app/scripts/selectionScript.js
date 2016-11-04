@@ -46,6 +46,7 @@ var getComments = function (markupid) {
 ****************************************************/
 
 var showComments = function (markupid) {
+  console.log('markupid on top', markupid);
   vex.dialog.alert('Comments: ' + commentsObj[markupid]);
 };
 
@@ -67,10 +68,6 @@ chrome.runtime.sendMessage({
   for (var key in groupsObj) {
     groupsSelected.push(key);
   }
-
-  console.log(groupsSelected);
-
-  console.log(markupIds, 'markupIDS', groupsSelected);
 
   $.ajax({
     type: 'GET',
@@ -274,15 +271,15 @@ var numbers = [0,1,2,3,4]
 
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  console.log(request, 'request');
+
 
   var allSelections = request.selection;
-  console.log(allSelections, 'AllSelections', request);
+
   for (var i = 0; i < allSelections.length; i++) {
     if (!userSet[allSelections[i].author]) {
       userSet[allSelections[i].author] = numbers.splice(0,1);
-      console.log('userSet[allSelections[i].author]', userSet[allSelections[i].author]);
     }
+
     var importedSelection = JSON.parse(allSelections[i].anchor);
     var markupId;
 
@@ -293,8 +290,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       console.error('markupID undefined');
     }
 
-    console.log(allSelections[i], 'allSelectionsFrank');
-
     editor.importSelection(importedSelection);
 
     // <a href="#" class="markable-tooltip" style="background-color: yellow;">' + getCurrentSelection() + '<span> Testing a long tooltip </a>';
@@ -302,7 +297,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     var html = '<span class="markable-tooltip"' + 'id="markupid_' + markupId + '"' +
       'style="background-color:' + colors[userSet[allSelections[i].author]] +
       ';">' + getCurrentSelection() + '<span class="markable-tooltip-popup">' + allSelections[i].author
-      + '<br>' + moment(allSelections[i].createdat).twitterShort() + ' ago <button class="testing"> Show Comments </button> </span></span>';
+      + '<br>' + moment(allSelections[i].createdat).twitterShort() + ' ago </span></span>';
 
     var sel = window.getSelection();
     var range;
@@ -330,6 +325,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       var lastInsertedNode = fragment.lastChild;
       var showFlag = false;
       var postFlag = false;
+
       range.insertNode(fragment);
       if (firstInsertedNode) {
         range.setStartBefore(firstInsertedNode);
@@ -345,7 +341,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       if (markupId) {
 
         vex.dialog.open({
-            message: 'Select a date and color.',
+            message: 'Comments',
             input: [
                 '<button class="showComments">',
                 'Show Comments',
@@ -361,6 +357,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
         $('body').delegate('.showComments', 'click', function () {
             if (!showFlag) {
+              console.log(markupId, 'markupid on the bottom');
               showComments(markupId);
               showFlag = true;
             }
