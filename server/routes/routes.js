@@ -253,7 +253,7 @@ exports.createMarkup = function(req, res) {
 };
 
 exports.shareMarkup = function(req, res) {
-  const markupID = req.body.groupID;
+  const markupID = req.body.markupID;
   const groupID = req.body.groupID;
 
   markups.share(markupID, groupID, function(err, success) {
@@ -293,6 +293,16 @@ exports.getComments = function(req, res) {
     if (flag) {
       return;
     }
+
+    console.log(success, 'SUCCESS IN EXPORTS.GETCOMMENTS');
+
+    if (err) {
+      console.log(err, 'error in get comments');
+    }
+    if (success.length > 0) {
+      console.log('franco this is being successful', success, err, success[0]);
+    }
+
     err ? res.status(404).send(err) : res.send(success);
     flag = true;
   });
