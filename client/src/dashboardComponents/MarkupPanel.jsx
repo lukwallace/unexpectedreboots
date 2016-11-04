@@ -56,7 +56,8 @@ class MarkupPanel extends React.Component {
              <div className='entry'>
                 <MarkupEntry title={markup.title} url={markup.url} author={markup.author} />
               </div>
-          ); })
+            );
+          })
         }
       </div>
     );
