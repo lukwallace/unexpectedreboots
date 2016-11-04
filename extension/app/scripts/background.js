@@ -73,7 +73,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   var destUrl = localStorage.getItem('destUrl');
 
   if (request.text === 'getUsername') {
-    sendResponse({username: username, groups: shareGroups});
+    sendResponse({username: username, groups: shareGroups, destUrl: destUrl});
   } else if (username) {
     var selection = request.selection;
     var url = '';
