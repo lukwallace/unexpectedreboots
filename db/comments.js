@@ -98,10 +98,6 @@ var getCommmentsByMarkup = function(markupid, callback) {
 
 }
 
-console.log(getCommmentsByMarkup(146, function (err, success) {
-  console.log(err, success[0], 'over here frank', success[0].comment);
-}));
-
 var checkGroupMarkupExists = function(markupid, groupid, callback) {
     pool.query({
       text: 'SELECT * FROM markupsgroups WHERE markupid = ' + markupid + ' \
