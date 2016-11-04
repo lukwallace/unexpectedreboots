@@ -343,3 +343,20 @@ pool.query({text:
   }
   );
 };
+
+
+
+exports.getGroupById = function(groupid, callback) {
+  pool.query({text:
+  'SELECT * from groups WHERE id = ' + groupid + ';'
+  },
+  function(err, rows) {
+    if(err) {
+      callback(err, null);
+    } else if (rows.rowCount === 0) {
+      callback('Cannot find group of id ' + groupid);
+    } else {
+      callback(null, rows.rows[0]);
+    }
+  });
+}
