@@ -224,8 +224,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
     var html = '<span class="markable-tooltip"' + 'id="markupid_' + markupId + '"' +
       'style="background-color:' + colors[userSet[allSelections[i].author]] +
-      ';">' + getCurrentSelection() + '<span class="markable-tooltip-popup">' + allSelections[i].author
-      + allSelections[i].markupid + '<br>'+ moment(allSelections[i].createdat).twitterShort() + ' ago </span></span>';
+      ';">' + getCurrentSelection() + '<span class="markable-tooltip-popup">' + allSelections[i].author + '<br>'+ moment(allSelections[i].createdat).twitterShort() + ' ago </span></span>';
 
     var sel = window.getSelection();
     var range;
